@@ -12,6 +12,7 @@ import TeamLogo from './components/TeamLogo'
 import { useIsMobile } from './hooks/useIsMobile'
 import { GitCompare, SlidersHorizontal } from 'lucide-react'
 import { flag } from './flags'
+import Logo from './components/Logo'
 
 const leagues = getLeagues(players)
 const nationalities = getNationalities(players)
@@ -117,9 +118,12 @@ export default function App() {
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? 16 : 24 }}>
-        <div>
-          <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 600, letterSpacing: '-0.02em' }}>FC 26 Scout</h1>
-          {!isMobile && <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 3 }}>18,405 players · 662 clubs · FC 26</p>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Logo size={isMobile ? 36 : 44} />
+          <div>
+            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, letterSpacing: '-0.02em' }}>EA Scout</h1>
+            {!isMobile && <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 2 }}>18,405 players · 662 clubs · FC 26</p>}
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 4, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 4 }}>
           {[{ key: 'players', label: 'Players' }, { key: 'teams', label: 'Teams' }].map(({ key, label }) => (
