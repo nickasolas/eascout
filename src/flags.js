@@ -1,0 +1,98 @@
+const DATA = {
+  'Afghanistan':             ['AF', 'AFG'], 'Albania':                ['AL', 'ALB'],
+  'Algeria':                 ['DZ', 'ALG'], 'Andorra':                ['AD', 'AND'],
+  'Angola':                  ['AO', 'ANG'], 'Antigua and Barbuda':    ['AG', 'ATG'],
+  'Argentina':               ['AR', 'ARG'], 'Armenia':                ['AM', 'ARM'],
+  'Australia':               ['AU', 'AUS'], 'Austria':                ['AT', 'AUT'],
+  'Azerbaijan':              ['AZ', 'AZE'], 'Bangladesh':             ['BD', 'BAN'],
+  'Barbados':                ['BB', 'BRB'], 'Belarus':                ['BY', 'BLR'],
+  'Belgium':                 ['BE', 'BEL'], 'Benin':                  ['BJ', 'BEN'],
+  'Bermuda':                 ['BM', 'BER'], 'Bolivia':                ['BO', 'BOL'],
+  'Bosnia and Herzegovina':  ['BA', 'BIH'], 'Brazil':                 ['BR', 'BRA'],
+  'Bulgaria':                ['BG', 'BUL'], 'Burkina Faso':           ['BF', 'BFA'],
+  'Burundi':                 ['BI', 'BDI'], 'Cabo Verde':             ['CV', 'CPV'],
+  'Cameroon':                ['CM', 'CMR'], 'Canada':                 ['CA', 'CAN'],
+  'Central African Republic':['CF', 'CAF'], 'Chad':                   ['TD', 'CHA'],
+  'Chile':                   ['CL', 'CHI'], 'China PR':               ['CN', 'CHN'],
+  'Chinese Taipei':          ['TW', 'TPE'], 'Colombia':               ['CO', 'COL'],
+  'Comoros':                 ['KM', 'COM'], 'Congo':                  ['CG', 'CGO'],
+  'Congo DR':                ['CD', 'COD'], 'Costa Rica':             ['CR', 'CRC'],
+  'Croatia':                 ['HR', 'CRO'], 'Cuba':                   ['CU', 'CUB'],
+  'Curacao':                 ['CW', 'CUW'], 'Cyprus':                 ['CY', 'CYP'],
+  'Czechia':                 ['CZ', 'CZE'], "Côte d'Ivoire":          ['CI', 'CIV'],
+  'Denmark':                 ['DK', 'DEN'], 'Dominican Republic':     ['DO', 'DOM'],
+  'Ecuador':                 ['EC', 'ECU'], 'Egypt':                  ['EG', 'EGY'],
+  'El Salvador':             ['SV', 'SLV'], 'England':                ['GB', 'ENG'],
+  'Equatorial Guinea':       ['GQ', 'EQG'], 'Estonia':                ['EE', 'EST'],
+  'Faroe Islands':           ['FO', 'FRO'], 'Finland':                ['FI', 'FIN'],
+  'France':                  ['FR', 'FRA'], 'Gabon':                  ['GA', 'GAB'],
+  'Gambia':                  ['GM', 'GAM'], 'Georgia':                ['GE', 'GEO'],
+  'Germany':                 ['DE', 'GER'], 'Ghana':                  ['GH', 'GHA'],
+  'Gibraltar':               ['GI', 'GIB'], 'Greece':                 ['GR', 'GRE'],
+  'Grenada':                 ['GD', 'GRN'], 'Guatemala':              ['GT', 'GUA'],
+  'Guinea':                  ['GN', 'GUI'], 'Guinea-Bissau':          ['GW', 'GNB'],
+  'Guyana':                  ['GY', 'GUY'], 'Haiti':                  ['HT', 'HAI'],
+  'Honduras':                ['HN', 'HON'], 'Hong Kong':              ['HK', 'HKG'],
+  'Hungary':                 ['HU', 'HUN'], 'Iceland':                ['IS', 'ISL'],
+  'India':                   ['IN', 'IND'], 'Indonesia':              ['ID', 'IDN'],
+  'Iran':                    ['IR', 'IRN'], 'Iraq':                   ['IQ', 'IRQ'],
+  'Israel':                  ['IL', 'ISR'], 'Italy':                  ['IT', 'ITA'],
+  'Jamaica':                 ['JM', 'JAM'], 'Japan':                  ['JP', 'JPN'],
+  'Jordan':                  ['JO', 'JOR'], 'Kenya':                  ['KE', 'KEN'],
+  'Korea Republic':          ['KR', 'KOR'], 'Kosovo':                 ['XK', 'KVX'],
+  'Latvia':                  ['LV', 'LVA'], 'Lebanon':                ['LB', 'LBN'],
+  'Liberia':                 ['LR', 'LBR'], 'Libya':                  ['LY', 'LBA'],
+  'Liechtenstein':           ['LI', 'LIE'], 'Lithuania':              ['LT', 'LTU'],
+  'Luxembourg':              ['LU', 'LUX'], 'Madagascar':             ['MG', 'MAD'],
+  'Malawi':                  ['MW', 'MWI'], 'Malaysia':               ['MY', 'MAS'],
+  'Mali':                    ['ML', 'MLI'], 'Malta':                  ['MT', 'MLT'],
+  'Mauritania':              ['MR', 'MTN'], 'Mexico':                 ['MX', 'MEX'],
+  'Moldova':                 ['MD', 'MDA'], 'Montenegro':             ['ME', 'MNE'],
+  'Montserrat':              ['MS', 'MSR'], 'Morocco':                ['MA', 'MAR'],
+  'Mozambique':              ['MZ', 'MOZ'], 'Namibia':                ['NA', 'NAM'],
+  'Netherlands':             ['NL', 'NED'], 'New Caledonia':          ['NC', 'NCL'],
+  'New Zealand':             ['NZ', 'NZL'], 'Niger':                  ['NE', 'NIG'],
+  'Nigeria':                 ['NG', 'NGA'], 'North Macedonia':        ['MK', 'MKD'],
+  'Northern Ireland':        ['GB', 'NIR'], 'Norway':                 ['NO', 'NOR'],
+  'Pakistan':                ['PK', 'PAK'], 'Palestine':              ['PS', 'PLE'],
+  'Panama':                  ['PA', 'PAN'], 'Paraguay':               ['PY', 'PAR'],
+  'Peru':                    ['PE', 'PER'], 'Philippines':            ['PH', 'PHI'],
+  'Poland':                  ['PL', 'POL'], 'Portugal':               ['PT', 'POR'],
+  'Puerto Rico':             ['PR', 'PUR'], 'Qatar':                  ['QA', 'QAT'],
+  'Republic of Ireland':     ['IE', 'IRL'], 'Romania':                ['RO', 'ROU'],
+  'Russia':                  ['RU', 'RUS'], 'Rwanda':                 ['RW', 'RWA'],
+  'Saint Kitts and Nevis':   ['KN', 'SKN'], 'Saint Lucia':            ['LC', 'LCA'],
+  'Saudi Arabia':            ['SA', 'KSA'], 'Scotland':               ['GB', 'SCO'],
+  'Senegal':                 ['SN', 'SEN'], 'Serbia':                 ['RS', 'SRB'],
+  'Sierra Leone':            ['SL', 'SLE'], 'Slovakia':               ['SK', 'SVK'],
+  'Slovenia':                ['SI', 'SVN'], 'Somalia':                ['SO', 'SOM'],
+  'South Africa':            ['ZA', 'RSA'], 'Spain':                  ['ES', 'ESP'],
+  'Sri Lanka':               ['LK', 'SRI'], 'Suriname':               ['SR', 'SUR'],
+  'Sweden':                  ['SE', 'SWE'], 'Switzerland':            ['CH', 'SUI'],
+  'Syria':                   ['SY', 'SYR'], 'Tajikistan':             ['TJ', 'TJK'],
+  'Tanzania':                ['TZ', 'TAN'], 'Thailand':               ['TH', 'THA'],
+  'Togo':                    ['TG', 'TOG'], 'Trinidad and Tobago':    ['TT', 'TRI'],
+  'Tunisia':                 ['TN', 'TUN'], 'Türkiye':                ['TR', 'TUR'],
+  'Uganda':                  ['UG', 'UGA'], 'Ukraine':                ['UA', 'UKR'],
+  'United Arab Emirates':    ['AE', 'UAE'], 'United States':          ['US', 'USA'],
+  'Uruguay':                 ['UY', 'URU'], 'Uzbekistan':             ['UZ', 'UZB'],
+  'Vanuatu':                 ['VU', 'VAN'], 'Venezuela':              ['VE', 'VEN'],
+  'Wales':                   ['GB', 'WAL'], 'Yemen':                  ['YE', 'YEM'],
+  'Zambia':                  ['ZM', 'ZAM'], 'Zimbabwe':               ['ZW', 'ZIM'],
+}
+
+function toEmoji(code) {
+  return code.toUpperCase().split('').map(c =>
+    String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)
+  ).join('')
+}
+
+export function flag(nationality) {
+  const d = DATA[nationality]
+  return d ? toEmoji(d[0]) : ''
+}
+
+export function abbr(nationality) {
+  const d = DATA[nationality]
+  return d ? d[1] : nationality?.slice(0, 3).toUpperCase() ?? ''
+}
