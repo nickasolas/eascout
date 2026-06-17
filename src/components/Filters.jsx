@@ -1,4 +1,4 @@
-import { Search, RotateCcw } from 'lucide-react'
+import { Search, RotateCcw, X } from 'lucide-react'
 import { ALL_POSITIONS, DEFAULT_FILTERS } from '../utils'
 import { flag } from '../flags'
 
@@ -21,16 +21,11 @@ function RangeRow({ label, minKey, maxKey, min, max, absMin, absMax, onChange })
   )
 }
 
-export default function Filters({ filters, onChange, onReset, leagues, nationalities, resultCount }) {
+function FilterBody({ filters, onChange, onReset, leagues, nationalities, resultCount, onClose }) {
   function set(key, val) { onChange({ ...filters, [key]: val }) }
 
   return (
-    <div style={{
-      width: 240, flexShrink: 0, minWidth: 0, overflow: 'hidden',
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: 12, padding: 16, alignSelf: 'flex-start',
-      position: 'sticky', top: 24, boxSizing: 'border-box'
-    }}>
+    <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <span style={{ fontWeight: 500, fontSize: 13 }}>Filters</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -38,6 +33,11 @@ export default function Filters({ filters, onChange, onReset, leagues, nationali
           <button onClick={onReset} title="Reset filters" style={{ color: 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
             <RotateCcw size={12} />
           </button>
+          {onClose && (
+            <button onClick={onClose} style={{ color: 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
+              <X size={12} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -115,6 +115,41 @@ export default function Filters({ filters, onChange, onReset, leagues, nationali
           ))}
         </div>
       </div>
+    </>
+  )
+}
+
+export default function Filters({ filters, onChange, onReset, leagues, nationalities, resultCount, mobile, open, onClose }) {
+  if (mobile) {
+    if (!open) return null
+    return (
+      <>
+        <div onClick={onClose} style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200,
+        }} />
+        <div style={{
+          position: 'fixed', top: 0, left: 0, bottom: 0, width: '85vw', maxWidth: 320,
+          background: 'var(--bg)', zIndex: 201, overflowY: 'auto',
+          padding: 20, boxSizing: 'border-box',
+          boxShadow: '4px 0 24px rgba(0,0,0,0.4)',
+        }}>
+          <FilterBody filters={filters} onChange={onChange} onReset={onReset}
+            leagues={leagues} nationalities={nationalities} resultCount={resultCount}
+            onClose={onClose} />
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <div style={{
+      width: 240, flexShrink: 0, minWidth: 0, overflow: 'hidden',
+      background: 'var(--surface)', border: '1px solid var(--border)',
+      borderRadius: 12, padding: 16, alignSelf: 'flex-start',
+      position: 'sticky', top: 24, boxSizing: 'border-box'
+    }}>
+      <FilterBody filters={filters} onChange={onChange} onReset={onReset}
+        leagues={leagues} nationalities={nationalities} resultCount={resultCount} />
     </div>
   )
 }
