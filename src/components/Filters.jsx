@@ -21,7 +21,7 @@ function RangeRow({ label, minKey, maxKey, min, max, absMin, absMax, onChange })
   )
 }
 
-function FilterBody({ filters, onChange, onReset, leagues, nationalities, resultCount, onClose }) {
+function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities, resultCount, onClose }) {
   function set(key, val) { onChange({ ...filters, [key]: val }) }
 
   return (
@@ -91,6 +91,16 @@ function FilterBody({ filters, onChange, onReset, leagues, nationalities, result
         </select>
       </div>
 
+      {filters.league && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>Club</div>
+          <select value={filters.club} onChange={e => set('club', e.target.value)} style={{ width: '100%', fontSize: 12 }}>
+            <option value="">All clubs</option>
+            {clubs.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+      )}
+
       <div style={{ marginBottom: 10 }}>
         <div style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>Nationality</div>
         <select value={filters.nationality} onChange={e => set('nationality', e.target.value)} style={{ width: '100%', fontSize: 12 }}>
@@ -119,7 +129,7 @@ function FilterBody({ filters, onChange, onReset, leagues, nationalities, result
   )
 }
 
-export default function Filters({ filters, onChange, onReset, leagues, nationalities, resultCount, mobile, open, onClose }) {
+export default function Filters({ filters, onChange, onReset, leagues, clubs, nationalities, resultCount, mobile, open, onClose }) {
   if (mobile) {
     if (!open) return null
     return (
@@ -134,7 +144,7 @@ export default function Filters({ filters, onChange, onReset, leagues, nationali
           boxShadow: '4px 0 24px rgba(0,0,0,0.4)',
         }}>
           <FilterBody filters={filters} onChange={onChange} onReset={onReset}
-            leagues={leagues} nationalities={nationalities} resultCount={resultCount}
+            leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={resultCount}
             onClose={onClose} />
         </div>
       </>
@@ -149,7 +159,7 @@ export default function Filters({ filters, onChange, onReset, leagues, nationali
       position: 'sticky', top: 24, boxSizing: 'border-box'
     }}>
       <FilterBody filters={filters} onChange={onChange} onReset={onReset}
-        leagues={leagues} nationalities={nationalities} resultCount={resultCount} />
+        leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={resultCount} />
     </div>
   )
 }

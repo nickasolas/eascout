@@ -33,10 +33,17 @@ export function getNationalities(players) {
   return [...new Set(players.map(p => p.nationality).filter(Boolean))].sort()
 }
 
+export function getClubsForLeague(players, league) {
+  return [...new Set(
+    players.filter(p => !league || p.league === league).map(p => p.club).filter(Boolean)
+  )].sort()
+}
+
 export const DEFAULT_FILTERS = {
   search: '',
   position: '',
   league: '',
+  club: '',
   nationality: '',
   foot: '',
   minAge: 16,
@@ -54,6 +61,7 @@ export function filterPlayers(players, f) {
     if (q && !p.name.toLowerCase().includes(q) && !p.club.toLowerCase().includes(q) && !p.nationality.toLowerCase().includes(q)) return false
     if (f.position && p.primaryPos !== f.position) return false
     if (f.league && p.league !== f.league) return false
+    if (f.club && p.club !== f.club) return false
     if (f.nationality && p.nationality !== f.nationality) return false
     if (f.foot && p.foot !== f.foot) return false
     if (p.age < f.minAge || p.age > f.maxAge) return false

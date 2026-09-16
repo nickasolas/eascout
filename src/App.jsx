@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import players from './players.json'
-import { filterPlayers, getLeagues, getNationalities, DEFAULT_FILTERS, gapColor } from './utils'
+import { filterPlayers, getLeagues, getNationalities, getClubsForLeague, DEFAULT_FILTERS, gapColor } from './utils'
 import PlayerTable from './components/PlayerTable'
 import PlayerCardList from './components/PlayerCardList'
 import PlayerCard from './components/PlayerCard'
@@ -46,6 +46,7 @@ export default function App() {
   const [recentlyViewed, setRecentlyViewed] = useState([])
   const [filtersOpen, setFiltersOpen] = useState(false)
 
+  const clubs = useMemo(() => getClubsForLeague(players, filters.league), [filters.league])
   const filtered = useMemo(() => filterPlayers(players, filters), [filters])
 
   function openPlayer(p) {
@@ -202,14 +203,14 @@ export default function App() {
           {isMobile ? (
             <>
               <Filters mobile open={filtersOpen} onClose={() => setFiltersOpen(false)}
-                filters={filters} onChange={setFilters} onReset={() => setFilters(DEFAULT_FILTERS)}
-                leagues={leagues} nationalities={nationalities} resultCount={filtered.length} />
+                filters={filters} onChange={f => setFilters(f.league !== filters.league ? {...f, club: ''} : f)} onReset={() => setFilters(DEFAULT_FILTERS)}
+                leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={filtered.length} />
               <PlayerCardList players={filtered} onSelect={openPlayer} compareList={compareList} onToggleCompare={toggleCompare} />
             </>
           ) : (
             <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-              <Filters filters={filters} onChange={setFilters} onReset={() => setFilters(DEFAULT_FILTERS)}
-                leagues={leagues} nationalities={nationalities} resultCount={filtered.length} />
+              <Filters filters={filters} onChange={f => setFilters(f.league !== filters.league ? {...f, club: ''} : f)} onReset={() => setFilters(DEFAULT_FILTERS)}
+                leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={filtered.length} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 {view === 'table'
                   ? <PlayerTable players={filtered} onSelect={openPlayer} compareList={compareList} onToggleCompare={toggleCompare} />
