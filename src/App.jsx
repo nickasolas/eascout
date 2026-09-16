@@ -122,7 +122,7 @@ export default function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Logo size={isMobile ? 36 : 44} />
           <div>
-            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, letterSpacing: '-0.02em' }}>EA Scout</h1>
+            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, letterSpacing: '-0.02em' }}>FCCareerScout</h1>
             {!isMobile && <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 2 }}>18,628 players · FC 27</p>}
           </div>
         </div>
