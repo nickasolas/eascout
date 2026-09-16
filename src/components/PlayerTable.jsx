@@ -105,7 +105,7 @@ export default function PlayerTable({ players, onSelect, compareList, onToggleCo
                     </div>
                   </td>
                   <td style={{ padding: '8px 10px', fontSize: 13, fontWeight: 600 }}>{p.overall}</td>
-                  <td style={{ padding: '8px 10px', fontSize: 13, fontWeight: 600, color: '#22c55e' }}>{p.potential}</td>
+                  <td style={{ padding: '8px 10px', fontSize: 13, fontWeight: 600, color: p.potential >= 80 ? '#22c55e' : p.potential >= 70 ? '#f59e0b' : '#7b82a0' }}>{p.potential}</td>
                   <td style={{ padding: '8px 10px', fontSize: 12 }}>
                     <span style={{ background: `${gapColor(p.gap)}22`, color: gapColor(p.gap), padding: '1px 6px', borderRadius: 20, fontSize: 11, fontWeight: 600 }}>
                       +{p.gap}
