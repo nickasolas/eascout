@@ -1,6 +1,25 @@
-import { Search, RotateCcw, X } from 'lucide-react'
+import { Search, RotateCcw, X, Bookmark, BookmarkCheck } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
 import { ALL_POSITIONS, DEFAULT_FILTERS } from '../utils'
 import { flag } from '../flags'
+
+const STORAGE_KEY = 'fccareerscout_saved_searches'
+
+function useSavedSearches() {
+  const [saved, setSaved] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [] } catch { return [] }
+  })
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(saved)) } catch {}
+  }, [saved])
+  function save(name, filters) {
+    setSaved(prev => [...prev.filter(s => s.name !== name), { name, filters }])
+  }
+  function remove(name) {
+    setSaved(prev => prev.filter(s => s.name !== name))
+  }
+  return { saved, save, remove }
+}
 
 function RangeRow({ label, minKey, maxKey, min, max, absMin, absMax, onChange }) {
   return (
@@ -21,15 +40,33 @@ function RangeRow({ label, minKey, maxKey, min, max, absMin, absMax, onChange })
   )
 }
 
-function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities, resultCount, onClose }) {
+function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities, resultCount, onClose, saved, onSave, onRemoveSaved, onLoadSaved }) {
+  const [saving, setSaving] = useState(false)
+  const [saveName, setSaveName] = useState('')
+  const nameInputRef = useRef(null)
   function set(key, val) { onChange({ ...filters, [key]: val }) }
+
+  function handleSave() {
+    if (!saving) {
+      setSaving(true)
+      setSaveName('')
+      setTimeout(() => nameInputRef.current?.focus(), 0)
+    }
+  }
+  function commitSave() {
+    const name = saveName.trim()
+    if (name) { onSave(name, filters); setSaving(false) }
+  }
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: saved.length > 0 || saving ? 10 : 16 }}>
         <span style={{ fontWeight: 500, fontSize: 13 }}>Filters</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>{resultCount.toLocaleString()} players</span>
+          <button onClick={handleSave} title="Save search" style={{ color: saving ? 'var(--accent)' : 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: `1px solid ${saving ? 'var(--accent)' : 'var(--border)'}` }}>
+            {saving ? <BookmarkCheck size={12} /> : <Bookmark size={12} />}
+          </button>
           <button onClick={onReset} title="Reset filters" style={{ color: 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
             <RotateCcw size={12} />
           </button>
@@ -40,6 +77,41 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
           )}
         </div>
       </div>
+
+      {saving && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
+          <input ref={nameInputRef} value={saveName} onChange={e => setSaveName(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') commitSave(); if (e.key === 'Escape') setSaving(false) }}
+            placeholder="Name this search…"
+            style={{ flex: 1, fontSize: 12, padding: '5px 9px' }} />
+          <button onClick={commitSave} style={{
+            padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600,
+            background: 'var(--accent)', color: '#fff', border: 'none', whiteSpace: 'nowrap',
+          }}>Save</button>
+          <button onClick={() => setSaving(false)} style={{
+            padding: '5px 8px', borderRadius: 7, fontSize: 11,
+            background: 'var(--surface2)', color: 'var(--text-dim)', border: '1px solid var(--border)',
+          }}>✕</button>
+        </div>
+      )}
+
+      {saved.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 14 }}>
+          {saved.map(s => (
+            <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 0, borderRadius: 20, overflow: 'hidden', border: '1px solid var(--accent)', background: 'var(--accent-light)' }}>
+              <button onClick={() => onLoadSaved(s.filters)} style={{
+                padding: '3px 9px', fontSize: 11, fontWeight: 500,
+                color: 'var(--accent)', background: 'transparent', border: 'none',
+                maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>{s.name}</button>
+              <button onClick={() => onRemoveSaved(s.name)} style={{
+                padding: '3px 6px 3px 2px', fontSize: 10, lineHeight: 1,
+                color: 'var(--accent)', background: 'transparent', border: 'none', opacity: 0.7,
+              }}>✕</button>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div style={{ position: 'relative', marginBottom: 12 }}>
         <Search size={13} style={{ position: 'absolute', left: 9, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-dim)', pointerEvents: 'none' }} />
@@ -130,6 +202,13 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
 }
 
 export default function Filters({ filters, onChange, onReset, leagues, clubs, nationalities, resultCount, mobile, open, onClose }) {
+  const { saved, save, remove } = useSavedSearches()
+
+  const bodyProps = {
+    filters, onChange, onReset, leagues, clubs, nationalities, resultCount,
+    saved, onSave: save, onRemoveSaved: remove, onLoadSaved: onChange,
+  }
+
   if (mobile) {
     if (!open) return null
     return (
@@ -143,9 +222,7 @@ export default function Filters({ filters, onChange, onReset, leagues, clubs, na
           padding: 20, boxSizing: 'border-box',
           boxShadow: '4px 0 24px rgba(0,0,0,0.4)',
         }}>
-          <FilterBody filters={filters} onChange={onChange} onReset={onReset}
-            leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={resultCount}
-            onClose={onClose} />
+          <FilterBody {...bodyProps} onClose={onClose} />
         </div>
       </>
     )
@@ -158,8 +235,7 @@ export default function Filters({ filters, onChange, onReset, leagues, clubs, na
       borderRadius: 12, padding: 16, alignSelf: 'flex-start',
       position: 'sticky', top: 24, boxSizing: 'border-box'
     }}>
-      <FilterBody filters={filters} onChange={onChange} onReset={onReset}
-        leagues={leagues} clubs={clubs} nationalities={nationalities} resultCount={resultCount} />
+      <FilterBody {...bodyProps} />
     </div>
   )
 }
