@@ -1,0 +1,43 @@
+name: Update Player Data
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6am UTC
+  workflow_dispatch:       # Allow manual runs from GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch player ratings from recharge.com
+        run: node scripts/fetch-recharge.mjs > /tmp/recharge_raw.json
+        timeout-minutes: 10
+
+      - name: Fetch potential data from fccareer.ai
+        run: node scripts/fetch-potential.mjs > /tmp/fccareer_potential.json
+        timeout-minutes: 20
+
+      - name: Merge data and rebuild players.json + teams.json
+        run: node scripts/build-data.mjs /tmp/recharge_raw.json /tmp/fccareer_potential.json
+
+      - name: Commit and push if data changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/players.json src/teams.json
+          if git diff --cached --quiet; then
+            echo "No changes to player data"
+          else
+            PLAYER_COUNT=$(node -e "const p=require('./src/players.json');console.log(p.length)")
+            git commit -m "Update FC 27 player data (${PLAYER_COUNT} players) [$(date -u '+%Y-%m-%d')]"
+            git push
+          fi
