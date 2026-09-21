@@ -26,8 +26,12 @@ jobs:
         run: node scripts/fetch-potential.mjs > /tmp/fccareer_potential.json
         timeout-minutes: 20
 
+      - name: Fetch club/transfer data from sofifa.com
+        run: node scripts/fetch-sofifa.mjs > /tmp/sofifa_players.json
+        timeout-minutes: 15
+
       - name: Merge data and rebuild players.json + teams.json
-        run: node scripts/build-data.mjs /tmp/recharge_raw.json /tmp/fccareer_potential.json
+        run: node scripts/build-data.mjs /tmp/recharge_raw.json /tmp/fccareer_potential.json /tmp/sofifa_players.json
 
       - name: Commit and push if data changed
         run: |
