@@ -62,11 +62,11 @@ export default function App() {
             <button key={p.id} onClick={() => openPlayer(p)}
               style={{
                 background: 'var(--surface)', border: '1px solid var(--border)',
-                borderRadius: 10, padding: '10px 12px', textAlign: 'left',
-                cursor: 'pointer', transition: 'border-color 0.15s',
+                borderRadius: 8, padding: '10px 12px', textAlign: 'left',
+                cursor: 'pointer', transition: 'border-color 0.15s, box-shadow 0.15s',
               }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--electric)'; e.currentTarget.style.boxShadow = '0 0 12px rgba(0,198,255,0.12)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                 <PlayerPhoto id={p.id} name={p.name} size={32} radius={8} />
@@ -105,15 +105,16 @@ export default function App() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Logo size={isMobile ? 36 : 44} />
           <div>
-            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, letterSpacing: '-0.02em' }}>FCCareerScout</h1>
-            {!isMobile && <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 2 }}>18,628 players · FC 27</p>}
+            <h1 className="broadcast-title" style={{ fontSize: isMobile ? 20 : 26, lineHeight: 1, color: '#fff' }}>FCCareer<span style={{ color: 'var(--electric)' }}>Scout</span></h1>
+            {!isMobile && <p style={{ color: 'var(--text-dim)', fontSize: 11, marginTop: 3, letterSpacing: '0.12em', textTransform: 'uppercase' }}>18,628 players · FC 27</p>}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 4, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 4 }}>
+        <div style={{ display: 'flex', gap: 2, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: 3 }}>
           {[{ key: 'players', label: 'Players' }, { key: 'teams', label: 'Teams' }].map(({ key, label }) => (
             <button key={key} onClick={() => setTab(key)} style={{
-              padding: isMobile ? '5px 14px' : '6px 20px', borderRadius: 7, fontSize: 13, fontWeight: 500,
-              background: tab === key ? 'var(--accent)' : 'transparent',
+              padding: isMobile ? '5px 14px' : '6px 20px', borderRadius: 6, fontSize: 12, fontWeight: 600,
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+              background: tab === key ? 'var(--grad-accent)' : 'transparent',
               color: tab === key ? '#fff' : 'var(--text-muted)',
               border: 'none', transition: 'background 0.15s, color 0.15s',
             }}>{label}</button>
@@ -142,9 +143,10 @@ export default function App() {
                 </button>
                 {compareList.length > 0 && (
                   <button onClick={() => setShowCompare(true)} style={{
-                    padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
-                    background: 'var(--accent-light)', color: 'var(--accent)',
-                    border: '1px solid var(--accent)',
+                    padding: '8px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                    letterSpacing: '0.06em', textTransform: 'uppercase',
+                    background: 'var(--electric-light)', color: 'var(--electric)',
+                    border: '1px solid rgba(0,198,255,0.3)',
                     display: 'flex', alignItems: 'center', gap: 5,
                   }}>
                     <GitCompare size={13} /> {compareList.length}
@@ -160,19 +162,21 @@ export default function App() {
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 {['table', 'scatter'].map(v => (
                   <button key={v} onClick={() => setView(v)} style={{
-                    padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500,
-                    background: view === v ? 'var(--accent)' : 'var(--surface)',
+                    padding: '7px 14px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    background: view === v ? 'var(--grad-accent)' : 'var(--surface)',
                     color: view === v ? '#fff' : 'var(--text-muted)',
-                    border: `1px solid ${view === v ? 'var(--accent)' : 'var(--border)'}`,
+                    border: `1px solid ${view === v ? 'transparent' : 'var(--border)'}`,
                   }}>
                     {v.charAt(0).toUpperCase() + v.slice(1)}
                   </button>
                 ))}
                 {compareList.length > 0 && (
                   <button onClick={() => setShowCompare(true)} style={{
-                    padding: '7px 14px', borderRadius: 8, fontSize: 12, fontWeight: 500,
-                    background: 'var(--accent-light)', color: 'var(--accent)',
-                    border: '1px solid var(--accent)',
+                    padding: '7px 14px', borderRadius: 6, fontSize: 11, fontWeight: 600,
+                    letterSpacing: '0.06em', textTransform: 'uppercase',
+                    background: 'var(--electric-light)', color: 'var(--electric)',
+                    border: '1px solid rgba(0,198,255,0.3)',
                     display: 'flex', alignItems: 'center', gap: 5,
                   }}>
                     <GitCompare size={13} /> Compare ({compareList.length})

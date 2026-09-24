@@ -71,16 +71,17 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
     }} onClick={onClose}>
       <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border-hover)',
-        borderRadius: 16, width: '100%', maxWidth: 640,
-        maxHeight: '90vh', overflowY: 'auto', padding: 24
+        background: 'var(--bg2)', border: '1px solid var(--border-hover)',
+        borderRadius: 12, width: '100%', maxWidth: 640,
+        maxHeight: '90vh', overflowY: 'auto', padding: 24,
+        boxShadow: '0 0 60px rgba(0,61,255,0.2), 0 0 120px rgba(0,0,0,0.8)',
       }} onClick={e => e.stopPropagation()}>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
             <PlayerPhoto id={player.id} name={player.name} size={80} radius={12} />
             <div>
-              <div style={{ fontSize: 20, fontWeight: 600 }}>{player.name}</div>
+              <div className="broadcast-title" style={{ fontSize: 24, lineHeight: 1.1 }}>{player.name}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                 <span>{flag(player.nationality)} {player.nationality}</span>
                 <span style={{ color: 'var(--text-dim)' }}>·</span>
@@ -93,15 +94,16 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button onClick={() => onCompare(player)} style={{
-              padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 500,
-              background: inCompare ? 'var(--accent)' : 'var(--surface2)',
+              padding: '6px 12px', borderRadius: 5, fontSize: 11, fontWeight: 700,
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+              background: inCompare ? 'var(--grad-accent)' : 'var(--surface2)',
               color: inCompare ? '#fff' : 'var(--text-muted)',
-              border: '1px solid var(--border-hover)',
+              border: `1px solid ${inCompare ? 'transparent' : 'var(--border-hover)'}`,
               display: 'flex', alignItems: 'center', gap: 4
             }}>
-              <Star size={13} /> {inCompare ? 'In compare' : 'Compare'}
+              <Star size={12} /> {inCompare ? 'In compare' : 'Compare'}
             </button>
-            <button onClick={onClose} style={{ color: 'var(--text-muted)', padding: 6, borderRadius: 8, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
+            <button onClick={onClose} style={{ color: 'var(--text-dim)', padding: 6, borderRadius: 5, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
               <X size={16} />
             </button>
           </div>
@@ -109,14 +111,14 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, marginBottom: 20 }}>
           {[
-            { label: 'OVR', val: player.overall, color: 'var(--text)' },
-            { label: 'POT', val: player.potential, color: '#22c55e' },
+            { label: 'OVR', val: player.overall, color: '#fff' },
+            { label: 'POT', val: player.potential, color: 'var(--green)' },
             { label: 'Gap', val: `+${gap}`, color: gColor },
-            { label: 'Value', val: fmtValue(player.value), color: 'var(--text-muted)' },
+            { label: 'Value', val: fmtValue(player.value), color: 'var(--electric)' },
           ].map(({ label, val, color }) => (
-            <div key={label} style={{ background: 'var(--surface2)', borderRadius: 10, padding: '10px 14px', textAlign: 'center' }}>
-              <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>{label}</div>
-              <div style={{ fontSize: 20, fontWeight: 600, color }}>{val}</div>
+            <div key={label} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', textAlign: 'center' }}>
+              <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: 5 }}>{label}</div>
+              <div className="broadcast-title" style={{ fontSize: 22, lineHeight: 1, color }}>{val}</div>
             </div>
           ))}
         </div>
@@ -151,9 +153,9 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
               { label: 'Volleys', val: player.volleys },
               { label: 'Composure', val: player.composure },
             ].map(({ label, val }) => (
-              <div key={label} style={{ background: 'var(--surface2)', borderRadius: 8, padding: '8px 10px' }}>
-                <div style={{ fontSize: 10, color: 'var(--text-dim)', marginBottom: 2 }}>{label}</div>
-                <div style={{ fontSize: 15, fontWeight: 500, color: val >= 70 ? '#6c63ff' : 'var(--text-muted)' }}>{val}</div>
+              <div key={label} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '8px 10px' }}>
+                <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: 3 }}>{label}</div>
+                <div className="broadcast-title" style={{ fontSize: 16, lineHeight: 1, color: val >= 80 ? 'var(--electric)' : val >= 70 ? 'var(--text)' : 'var(--text-muted)' }}>{val}</div>
               </div>
             ))}
           </div>

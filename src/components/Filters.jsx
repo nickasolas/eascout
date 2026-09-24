@@ -64,7 +64,7 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
         <span style={{ fontWeight: 500, fontSize: 13 }}>Filters</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>{resultCount.toLocaleString()} players</span>
-          <button onClick={handleSave} title="Save search" style={{ color: saving ? 'var(--accent)' : 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: `1px solid ${saving ? 'var(--accent)' : 'var(--border)'}` }}>
+          <button onClick={handleSave} title="Save search" style={{ color: saving ? 'var(--electric)' : 'var(--text-dim)', padding: 4, borderRadius: 4, background: 'var(--surface2)', border: `1px solid ${saving ? 'rgba(0,198,255,0.4)' : 'var(--border)'}` }}>
             {saving ? <BookmarkCheck size={12} /> : <Bookmark size={12} />}
           </button>
           <button onClick={onReset} title="Reset filters" style={{ color: 'var(--text-dim)', padding: 4, borderRadius: 6, background: 'var(--surface2)', border: '1px solid var(--border)' }}>
@@ -85,8 +85,9 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
             placeholder="Name this search…"
             style={{ flex: 1, fontSize: 12, padding: '5px 9px' }} />
           <button onClick={commitSave} style={{
-            padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600,
-            background: 'var(--accent)', color: '#fff', border: 'none', whiteSpace: 'nowrap',
+            padding: '5px 10px', borderRadius: 5, fontSize: 11, fontWeight: 700,
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            background: 'var(--grad-accent)', color: '#fff', border: 'none', whiteSpace: 'nowrap',
           }}>Save</button>
           <button onClick={() => setSaving(false)} style={{
             padding: '5px 8px', borderRadius: 7, fontSize: 11,
@@ -98,15 +99,15 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
       {saved.length > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 14 }}>
           {saved.map(s => (
-            <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 0, borderRadius: 20, overflow: 'hidden', border: '1px solid var(--accent)', background: 'var(--accent-light)' }}>
+            <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 0, borderRadius: 4, overflow: 'hidden', border: '1px solid rgba(0,198,255,0.3)', background: 'var(--electric-light)' }}>
               <button onClick={() => onLoadSaved(s.filters)} style={{
                 padding: '3px 9px', fontSize: 11, fontWeight: 500,
-                color: 'var(--accent)', background: 'transparent', border: 'none',
+                color: 'var(--electric)', background: 'transparent', border: 'none',
                 maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
               }}>{s.name}</button>
               <button onClick={() => onRemoveSaved(s.name)} style={{
                 padding: '3px 6px 3px 2px', fontSize: 10, lineHeight: 1,
-                color: 'var(--accent)', background: 'transparent', border: 'none', opacity: 0.7,
+                color: 'var(--electric)', background: 'transparent', border: 'none', opacity: 0.7,
               }}>✕</button>
             </div>
           ))}
@@ -126,10 +127,11 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
           {ALL_POSITIONS.map(pos => (
             <button key={pos} onClick={() => set('position', filters.position === pos ? '' : pos)}
               style={{
-                padding: '3px 8px', borderRadius: 6, fontSize: 11, fontWeight: 500,
-                background: filters.position === pos ? 'var(--accent)' : 'var(--surface2)',
+                padding: '3px 9px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+                letterSpacing: '0.06em',
+                background: filters.position === pos ? 'var(--grad-accent)' : 'var(--surface2)',
                 color: filters.position === pos ? '#fff' : 'var(--text-muted)',
-                border: `1px solid ${filters.position === pos ? 'var(--accent)' : 'var(--border)'}`,
+                border: `1px solid ${filters.position === pos ? 'transparent' : 'var(--border)'}`,
               }}>
               {pos}
             </button>
@@ -187,10 +189,11 @@ function FilterBody({ filters, onChange, onReset, leagues, clubs, nationalities,
           {['', 'Right', 'Left'].map(f => (
             <button key={f} onClick={() => set('foot', f)}
               style={{
-                flex: 1, padding: '5px 0', borderRadius: 7, fontSize: 11,
-                background: filters.foot === f ? 'var(--accent)' : 'var(--surface2)',
+                flex: 1, padding: '5px 0', borderRadius: 5, fontSize: 10, fontWeight: 600,
+                letterSpacing: '0.06em', textTransform: 'uppercase',
+                background: filters.foot === f ? 'var(--grad-accent)' : 'var(--surface2)',
                 color: filters.foot === f ? '#fff' : 'var(--text-muted)',
-                border: `1px solid ${filters.foot === f ? 'var(--accent)' : 'var(--border)'}`,
+                border: `1px solid ${filters.foot === f ? 'transparent' : 'var(--border)'}`,
               }}>
               {f || 'Any'}
             </button>
@@ -214,13 +217,13 @@ export default function Filters({ filters, onChange, onReset, leagues, clubs, na
     return (
       <>
         <div onClick={onClose} style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 200,
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', zIndex: 200,
         }} />
         <div style={{
           position: 'fixed', top: 0, left: 0, bottom: 0, width: '85vw', maxWidth: 320,
-          background: 'var(--bg)', zIndex: 201, overflowY: 'auto',
+          background: 'var(--bg2)', zIndex: 201, overflowY: 'auto',
           padding: 20, boxSizing: 'border-box',
-          boxShadow: '4px 0 24px rgba(0,0,0,0.4)',
+          boxShadow: '4px 0 32px rgba(0,0,0,0.6), 1px 0 0 var(--border)',
         }}>
           <FilterBody {...bodyProps} onClose={onClose} />
         </div>
@@ -233,7 +236,8 @@ export default function Filters({ filters, onChange, onReset, leagues, clubs, na
       width: 240, flexShrink: 0, minWidth: 0, overflow: 'hidden',
       background: 'var(--surface)', border: '1px solid var(--border)',
       borderRadius: 12, padding: 16, alignSelf: 'flex-start',
-      position: 'sticky', top: 24, boxSizing: 'border-box'
+      position: 'sticky', top: 24, boxSizing: 'border-box',
+      boxShadow: '0 0 0 1px rgba(0,198,255,0.04)',
     }}>
       <FilterBody {...bodyProps} />
     </div>

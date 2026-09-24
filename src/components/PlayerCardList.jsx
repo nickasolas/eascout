@@ -29,10 +29,11 @@ export default function PlayerCardList({ players, onSelect, compareList, onToggl
         <span style={{ fontSize: 11, color: 'var(--text-dim)', alignSelf: 'center', marginRight: 2 }}>Sort:</span>
         {SORT_OPTIONS.map(o => (
           <button key={o.key} onClick={() => { setSortCol(o.key); setPage(0) }} style={{
-            padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 500,
-            background: sortCol === o.key ? 'var(--accent)' : 'var(--surface)',
+            padding: '4px 11px', borderRadius: 4, fontSize: 10, fontWeight: 700,
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            background: sortCol === o.key ? 'var(--grad-accent)' : 'var(--surface)',
             color: sortCol === o.key ? '#fff' : 'var(--text-muted)',
-            border: `1px solid ${sortCol === o.key ? 'var(--accent)' : 'var(--border)'}`,
+            border: `1px solid ${sortCol === o.key ? 'transparent' : 'var(--border)'}`,
           }}>{o.label}</button>
         ))}
         <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--text-dim)', alignSelf: 'center' }}>
@@ -52,10 +53,11 @@ export default function PlayerCardList({ players, onSelect, compareList, onToggl
           return (
             <div key={p.id} onClick={() => onSelect(p)} style={{
               background: 'var(--surface)', border: '1px solid var(--border)',
-              borderRadius: 12, padding: '12px 14px', cursor: 'pointer',
+              borderRadius: 8, padding: '12px 14px', cursor: 'pointer',
+              transition: 'border-color 0.15s, box-shadow 0.15s',
             }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--electric)'; e.currentTarget.style.boxShadow = '0 0 16px rgba(0,198,255,0.08)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none' }}
             >
               <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                 <PlayerPhoto id={p.id} name={p.name} size={40} radius={10} />
@@ -63,9 +65,9 @@ export default function PlayerCardList({ players, onSelect, compareList, onToggl
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, marginRight: 8 }}>{p.name}</div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{p.overall}</span>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: '#22c55e' }}>{p.potential}</span>
-                      <span style={{ fontSize: 11, background: `${gc}22`, color: gc, padding: '1px 6px', borderRadius: 20, fontWeight: 600 }}>+{p.gap}</span>
+                      <span className="broadcast-title" style={{ fontSize: 16, color: '#fff' }}>{p.overall}</span>
+                      <span className="broadcast-title" style={{ fontSize: 15, color: 'var(--green)' }}>{p.potential}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.04em', background: `${gc}22`, color: gc, padding: '2px 7px', borderRadius: 3 }}>+{p.gap}</span>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, flexWrap: 'wrap' }}>

@@ -6,16 +6,16 @@ export function fmtValue(v) {
 }
 
 export function gapColor(gap) {
-  if (gap >= 15) return '#22c55e'
+  if (gap >= 15) return '#22e07d'
   if (gap >= 10) return '#f59e0b'
-  return '#7b82a0'
+  return '#4a5a7a'
 }
 
 export function statColor(val) {
-  if (val >= 80) return '#22c55e'
-  if (val >= 70) return '#6c63ff'
-  if (val >= 60) return '#f59e0b'
-  return '#7b82a0'
+  if (val >= 85) return '#22e07d'
+  if (val >= 75) return '#00c6ff'
+  if (val >= 65) return '#f59e0b'
+  return '#4a5a7a'
 }
 
 export const ALL_POSITIONS = [
