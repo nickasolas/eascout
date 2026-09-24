@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import players from './players.json'
+import meta from './meta.json'
 import { filterPlayers, getLeagues, getNationalities, getClubsForLeague, DEFAULT_FILTERS, gapColor } from './utils'
 import PlayerTable from './components/PlayerTable'
 import PlayerCardList from './components/PlayerCardList'
@@ -106,7 +107,14 @@ export default function App() {
           <Logo size={isMobile ? 36 : 44} />
           <div>
             <h1 className="broadcast-title" style={{ fontSize: isMobile ? 20 : 26, lineHeight: 1, color: '#fff' }}>FCCareer<span style={{ color: 'var(--electric)' }}>Scout</span></h1>
-            {!isMobile && <p style={{ color: 'var(--text-dim)', fontSize: 11, marginTop: 3, letterSpacing: '0.12em', textTransform: 'uppercase' }}>18,628 players · FC 27</p>}
+            {!isMobile && (
+              <p style={{ color: 'var(--text-dim)', fontSize: 11, marginTop: 3, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+                18,628 players · FC 27
+                <span style={{ marginLeft: 10, color: 'var(--text-dim)', opacity: 0.6, letterSpacing: '0.06em', fontWeight: 400, textTransform: 'none' }}>
+                  · Updated {new Date(meta.lastUpdated).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                </span>
+              </p>
+            )}
           </div>
         </div>
         <div style={{ display: 'flex', gap: 2, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: 3 }}>

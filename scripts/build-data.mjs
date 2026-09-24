@@ -142,7 +142,11 @@ const withPositions = final.map(p => ({
 
 // Write players.json
 fs.writeFileSync(path.join(SRC, 'players.json'), JSON.stringify(withPositions))
-console.error(`Wrote src/players.json (${final.length} players)`)
+console.error(`Wrote src/players.json (${withPositions.length} players)`)
+
+// Write meta.json with build timestamp
+fs.writeFileSync(path.join(SRC, 'meta.json'), JSON.stringify({ lastUpdated: new Date().toISOString() }))
+console.error('Wrote src/meta.json')
 
 // Build teams.json
 const clubMap = {}
