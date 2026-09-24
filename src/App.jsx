@@ -13,27 +13,10 @@ import { useIsMobile } from './hooks/useIsMobile'
 import { GitCompare, SlidersHorizontal } from 'lucide-react'
 import { flag } from './flags'
 import Logo from './components/Logo'
+import PlayerPhoto from './components/PlayerPhoto'
 
 const leagues = getLeagues(players)
 const nationalities = getNationalities(players)
-
-const AVATAR_COLORS = [
-  ['#6c63ff','#3d3580'],['#22c55e','#14532d'],['#f59e0b','#78350f'],
-  ['#ef4444','#7f1d1d'],['#06b6d4','#164e63'],['#ec4899','#831843'],
-]
-function PlayerMiniAvatar({ name }) {
-  const initials = name.split(/[\s.]+/).filter(Boolean).map(p => p[0]).join('').slice(0, 2).toUpperCase()
-  const seed = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0)
-  const [light, dark] = AVATAR_COLORS[seed % AVATAR_COLORS.length]
-  return (
-    <div style={{
-      width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-      background: `linear-gradient(135deg, ${dark} 0%, ${light}99 100%)`,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: 11, fontWeight: 700, color: '#fff',
-    }}>{initials}</div>
-  )
-}
 
 export default function App() {
   const isMobile = useIsMobile()
@@ -86,7 +69,7 @@ export default function App() {
               onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <PlayerMiniAvatar name={p.name} />
+                <PlayerPhoto id={p.id} name={p.name} size={32} radius={8} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
                   <div style={{ fontSize: 10, color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: 4, marginTop: 1 }}>

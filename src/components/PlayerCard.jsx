@@ -2,45 +2,8 @@ import { fmtValue, gapColor } from '../utils'
 import { flag } from '../flags'
 import TeamLogo from './TeamLogo'
 import StatBar from './StatBar'
+import PlayerPhoto from './PlayerPhoto'
 import { X, Star } from 'lucide-react'
-
-const AVATAR_COLORS = [
-  ['#6c63ff', '#3d3580'],
-  ['#22c55e', '#14532d'],
-  ['#f59e0b', '#78350f'],
-  ['#ef4444', '#7f1d1d'],
-  ['#06b6d4', '#164e63'],
-  ['#ec4899', '#831843'],
-  ['#a78bfa', '#4c1d95'],
-  ['#34d399', '#064e3b'],
-]
-
-function PlayerAvatar({ name, size = 80 }) {
-  const initials = name
-    .split(/[\s.]+/)
-    .filter(Boolean)
-    .map(p => p[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-
-  const seed = name.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0)
-  const [light, dark] = AVATAR_COLORS[seed % AVATAR_COLORS.length]
-
-  return (
-    <div style={{
-      width: size, height: size, borderRadius: 12, flexShrink: 0,
-      background: `linear-gradient(135deg, ${dark} 0%, ${light}99 100%)`,
-      border: `1px solid ${light}55`,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: size * 0.34, fontWeight: 700, color: '#fff',
-      letterSpacing: '-0.02em',
-      boxShadow: `0 0 0 1px ${light}33`,
-    }}>
-      {initials}
-    </div>
-  )
-}
 
 const RADAR_STATS = [
   { key: 'pace', label: 'PAC' },
@@ -115,7 +78,7 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <PlayerAvatar name={player.name} size={80} />
+            <PlayerPhoto id={player.id} name={player.name} size={80} radius={12} />
             <div>
               <div style={{ fontSize: 20, fontWeight: 600 }}>{player.name}</div>
               <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
