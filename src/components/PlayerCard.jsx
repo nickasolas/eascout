@@ -82,7 +82,24 @@ export default function PlayerCard({ player, onClose, onCompare, inCompare }) {
             <PlayerPhoto id={player.id} name={player.name} size={80} radius={12} />
             <div>
               <div className="broadcast-title" style={{ fontSize: 24, lineHeight: 1.1 }}>{player.name}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 4, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 6, flexWrap: 'wrap' }}>
+                <span style={{
+                  padding: '2px 8px', borderRadius: 3, fontSize: 10, fontWeight: 700,
+                  letterSpacing: '0.08em', background: 'var(--grad-accent)', color: '#fff',
+                }}>
+                  {player.primaryPos}
+                </span>
+                {(player.secondaryPositions || []).map(pos => (
+                  <span key={pos} style={{
+                    padding: '2px 7px', borderRadius: 3, fontSize: 10, fontWeight: 600,
+                    letterSpacing: '0.06em', background: 'var(--surface3)',
+                    color: 'var(--text-muted)', border: '1px solid var(--border)',
+                  }}>
+                    {pos}
+                  </span>
+                ))}
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 6, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                 <span>{flag(player.nationality)} {player.nationality}</span>
                 <span style={{ color: 'var(--text-dim)' }}>·</span>
                 <TeamLogo name={player.club} teamId={player.clubId} size={16} />
