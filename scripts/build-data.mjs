@@ -26,22 +26,72 @@ function toSlug(name) {
     .replace(/[^a-z0-9\s]/g, '').trim().replace(/\s+/g, '-')
 }
 
-// Build prefix index
+// Build multiple lookup indexes for robust name matching:
+// 1. Prefix index: "kylian-mbappe" matches "kylian-mbappe-lottin"
+// 2. Word-pair index: "lionel-messi" matches "lionel-andres-messi-cuccitini" (first + any word)
+// 3. Single-word index: "rodri" matches "rodrigo-hernandez-cascante" (any word in slug)
+// 4. Fuzzy slug: strip vowels/double-letters to handle Haaland→Haland spelling diffs
 const byPrefix = {}
+const byWordPair = {}  // first-word + any-word
+const byAnyWord = {}   // any single word in slug
+
+// Normalize double letters: haaland→haland, fernández→fernandez already done by toSlug
+function dedupe(s) { return s.replace(/(.)\1+/g, '$1') }
+
 fccareer.forEach(p => {
   const parts = p.slug.split('-')
+
+  // 1. Prefix index
   for (let i = 1; i <= parts.length; i++) {
     const prefix = parts.slice(0, i).join('-')
     if (!byPrefix[prefix]) byPrefix[prefix] = []
     byPrefix[prefix].push(p)
+    // Also index deduped version (haaland↔haland)
+    const deduped = prefix.split('-').map(dedupe).join('-')
+    if (deduped !== prefix) {
+      if (!byPrefix[deduped]) byPrefix[deduped] = []
+      byPrefix[deduped].push(p)
+    }
   }
+
+  // 2. Word-pair: first word + every other word
+  for (let j = 1; j < parts.length; j++) {
+    const key = `${parts[0]}-${parts[j]}`
+    if (!byWordPair[key]) byWordPair[key] = []
+    byWordPair[key].push(p)
+  }
+
+  // 3. Any single word (for mononym players like Rodri, Pedri, Raphinha)
+  parts.forEach(w => {
+    if (w.length >= 4) {
+      if (!byAnyWord[w]) byAnyWord[w] = []
+      byAnyWord[w].push(p)
+    }
+  })
 })
+
+function findBest(candidates, overall) {
+  if (!candidates || !candidates.length) return null
+  return candidates.find(c => c.overall === overall) || (candidates.length === 1 ? candidates[0] : null)
+}
 
 let matched = 0
 const enriched = players.map(p => {
   const slug = toSlug(p.name)
-  const candidates = byPrefix[slug] || []
-  const best = candidates.find(c => c.overall === p.overall) || (candidates.length === 1 ? candidates[0] : null)
+  const parts = slug.split('-')
+
+  // Try each strategy in order of precision
+  let best =
+    // 1. Exact prefix match
+    findBest(byPrefix[slug], p.overall) ||
+    // 2. First word + any word (handles compound surnames)
+    (parts.length >= 2 && parts.reduce((found, w, i) => {
+      if (found || i === 0) return found
+      return findBest(byWordPair[`${parts[0]}-${w}`], p.overall)
+    }, null)) ||
+    // 3. Single mononym lookup (Rodri, Pedri, Raphinha, etc.)
+    (parts.length === 1 && findBest(byAnyWord[parts[0]], p.overall))
+
   if (best) {
     matched++
     return { ...p, potential: best.potential, gap: best.potential - p.overall, value: best.value }
